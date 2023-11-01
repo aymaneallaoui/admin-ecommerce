@@ -1,3 +1,4 @@
+import NavBar from "@/components/navbar";
 import prismadb from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -32,7 +33,7 @@ export default async function SetupLayout({
 
   return (
     <>
-      <div> this is a NavBar</div>
+      <NavBar />
       {children}
     </>
   );
