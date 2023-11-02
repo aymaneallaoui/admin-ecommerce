@@ -5,11 +5,13 @@ import { H4 } from "@/components/ui/Typography";
 import { Badge, BadgeProps } from "./badge";
 import { Button } from "./button";
 import toast from "react-hot-toast";
+import { cn } from "@/lib/utils";
 
 interface ApiAlertProps {
   title: string;
   description: string;
   variant: "public" | "admin";
+  className?: string;
 }
 
 const TextMap: Record<ApiAlertProps["variant"], string> = {
@@ -18,7 +20,7 @@ const TextMap: Record<ApiAlertProps["variant"], string> = {
 };
 
 const variantMap: Record<ApiAlertProps["variant"], BadgeProps["variant"]> = {
-  public: "default",
+  public: "secondary",
   admin: "destructive",
 };
 
@@ -26,13 +28,14 @@ export const ApiAlert: React.FC<ApiAlertProps> = ({
   title,
   description,
   variant = "public",
+  className,
 }) => {
   const oncopy = () => {
     navigator.clipboard.writeText(description);
     toast.success("Copied to clipboard");
   };
   return (
-    <Alert>
+    <Alert className={className}>
       <Server className="w-4 h-4" />
       <AlertTitle className="flex items-center gap-x-2">
         <H4>{title}</H4>
