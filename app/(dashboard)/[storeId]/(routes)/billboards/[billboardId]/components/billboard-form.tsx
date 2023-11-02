@@ -6,11 +6,9 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-<<<<<<< HEAD
+
 import { Loader2Icon, Trash } from "lucide-react";
-=======
-import { Trash } from "lucide-react";
->>>>>>> 43c0864dbed99392fae04d79833cad4157c9f86b
+
 import { Billboard } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 
@@ -170,10 +168,8 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
-<<<<<<< HEAD
+
             {loading && <Loader2Icon className="w-4 h-4 ml-2 animate-spin" />}
-=======
->>>>>>> 43c0864dbed99392fae04d79833cad4157c9f86b
           </Button>
         </form>
       </Form>
