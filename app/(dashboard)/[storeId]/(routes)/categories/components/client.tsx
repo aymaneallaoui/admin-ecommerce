@@ -5,29 +5,29 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { PlusCircle } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import { BillboardColumn, columns } from "./columns";
+import { CategoriesColumns, columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table";
 import { ApiList } from "@/components/ui/api-list";
 
-interface BillboardClientProps {
-  data: BillboardColumn[];
+interface CategoriesClientProps {
+  data: CategoriesColumns[];
 }
 
-export const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
+export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
   return (
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`your Billboards (${data.length})`}
-          description="Manage billboards for your client"
+          title={`your Categories (${data.length})`}
+          description="Manage Categories for your Store"
         />
         <Button
-          onClick={() => router.push(`/${params.storeId}/billboards/new`)}
+          onClick={() => router.push(`/${params.storeId}/categories/new`)}
         >
           <PlusCircle className="w-4 h-4 mr-2" />
-          add billboard
+          create new Category
         </Button>
       </div>
       <Separator />
@@ -36,9 +36,9 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
 
       <Separator />
 
-      <Heading title="API" description="APi calls for billboards" />
+      <Heading title="API" description="APi calls for categories" />
 
-      <ApiList entityName="billboards" entityIdName="billboardId" />
+      <ApiList entityName="categories" entityIdName="categoriesId" />
     </>
   );
 };

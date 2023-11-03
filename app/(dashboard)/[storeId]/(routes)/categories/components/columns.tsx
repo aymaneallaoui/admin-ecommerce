@@ -5,16 +5,22 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { CellAction } from "./cell-action";
 
-export type BillboardColumn = {
+export type CategoriesColumns = {
   id: string;
-  label: string;
+  name: string;
+  billboardLabel: string;
   createdAt: string;
 };
 
-export const columns: ColumnDef<BillboardColumn>[] = [
+export const columns: ColumnDef<CategoriesColumns>[] = [
   {
-    accessorKey: "label",
-    header: "Label",
+    accessorKey: "name",
+    header: "Name",
+  },
+  {
+    accessorKey: "billboard",
+    header: "Billboard",
+    cell: ({ row }) => row.original.billboardLabel,
   },
   {
     accessorKey: "createdAt",

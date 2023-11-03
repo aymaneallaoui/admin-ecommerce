@@ -29,7 +29,7 @@ function H2({
   return (
     <p
       className={cn(
-        "scroll-m-20  pb-2 text-3xl font-semibold tracking-tight first:mt-0",
+        " font-extrabold text-[max(48px,min(2vw,76px))] leading-none -tracking-wider gradient-text inline-block text-transparent bg-clip-text  ",
         className
       )}
     >
