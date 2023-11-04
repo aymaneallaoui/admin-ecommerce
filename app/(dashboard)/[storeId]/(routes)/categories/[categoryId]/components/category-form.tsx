@@ -1,46 +1,8 @@
 "use client";
 
 import * as z from "zod";
-import axios from "axios";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
-
-import { Loader2Icon, Trash } from "lucide-react";
 
 import { Billboard, Category } from "@prisma/client";
-import { useParams, useRouter } from "next/navigation";
-
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
-import Heading from "@/components/ui/Heading";
-import { AlertModal } from "@/components/modals/alert-modal";
-import ImageUpload from "@/components/ui/image-upload";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import {
   Command,
@@ -49,6 +11,38 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  HardDriveUploadIcon,
+  Loader2Icon,
+  PlusCircleIcon,
+  Trash,
+} from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useParams, useRouter } from "next/navigation";
+
+import { AlertModal } from "@/components/modals/alert-modal";
+import { Button } from "@/components/ui/button";
+import Heading from "@/components/ui/Heading";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import axios from "axios";
+import { cn } from "@/lib/utils";
+import { toast } from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
   name: z.string().min(3),
@@ -77,7 +71,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   const title = initialData ? "Edit Category" : "Create Category";
   const description = initialData ? "Edit a Category." : "Add a new Category";
   const toastMessage = initialData ? "Category updated." : "Category created.";
-  const action = initialData ? "Save changes" : "Create";
+  const action = initialData ? "Save changes " : "Create new";
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(formSchema),
@@ -90,17 +84,17 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   const onSubmit = async (data: CategoryFormValues) => {
     try {
       setLoading(true);
-      console.log(data);
-      // if (initialData) {
-      //   await axios.patch(
-      //     `/api/${params.storeId}/categories/${params.CategoryId}`,
-      //     data
-      //   );
-      // } else {
-      //   await axios.post(`/api/${params.storeId}/categories`, data);
-      // }
-      // router.refresh();
-      // router.push(`/${params.storeId}/categories`);
+
+      if (initialData) {
+        await axios.patch(
+          `/api/${params.storeId}/categories/${params.categoryId}`,
+          data
+        );
+      } else {
+        await axios.post(`/api/${params.storeId}/categories`, data);
+      }
+      router.refresh();
+      router.push(`/${params.storeId}/categories`);
       toast.success(toastMessage);
     } catch (error: any) {
       toast.error("Something went wrong.");
@@ -113,14 +107,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.storeId}/categories/${params.CategoryId}`
+        `/api/${params.storeId}/categories/${params.categoryId}`
       );
       router.refresh();
       router.push(`/${params.storeId}/categories`);
       toast.success("Category deleted.");
     } catch (error: any) {
       toast.error(
-        "Make sure you removed all categories using this Category first."
+        "Make sure you removed all products using this category first."
       );
     } finally {
       setLoading(false);
@@ -153,9 +147,9 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
+          className="w-full space-y-8"
         >
-          <div className="md:grid md:grid-cols-3 gap-8">
+          <div className="grid-cols-3 gap-8 md:grid md:grid-cols-3 sm:grid sm:grid-cols-2 ">
             <FormField
               control={form.control}
               name="name"
@@ -179,6 +173,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Billboard</FormLabel>
+
                   <Popover open={triggerOpen} onOpenChange={setTriggerOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -186,7 +181,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "w-[200px] justify-between",
+                            " flex h-9  w-full  rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 justify-between",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -195,7 +190,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                                 (billboard) => billboard.id === field.value
                               )?.label
                             : "Select Billboard"}
-                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          <CaretSortIcon className="w-4 h-4 ml-2 opacity-50 shrink-0" />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -237,6 +232,13 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
+            {action === "Save changes " ? (
+              <PlusCircleIcon className="w-4 h-4 ml-2" />
+            ) : null}
+            {action === "Save changes " ? (
+              <HardDriveUploadIcon className="w-4 h-4 ml-2" />
+            ) : null}
+            {loading && <Loader2Icon className="w-4 h-4 ml-2 animate-spin" />}
           </Button>
         </form>
       </Form>
