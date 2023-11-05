@@ -30,7 +30,6 @@ body,
     --input: 220 13% 91%;
     --ring: 262.1 83.3% 57.8%;
     --radius: 0.5rem;
-    --gradient-text: linear-gradient(180deg, #555, #000);
   }
 
   .dark {
@@ -53,6 +52,14 @@ body,
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
     --ring: 263.4 70% 50.4%;
+  }
+}
+
+@layer base {
+  :root {
+    --gradient-text: linear-gradient(180deg, #555, #000);
+  }
+  .dark {
     --gradient-text: linear-gradient(180deg, #fff, #adadad);
   }
 }

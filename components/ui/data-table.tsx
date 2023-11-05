@@ -1,17 +1,23 @@
 "use client";
 
 import {
+  ChevronLeftCircleIcon,
+  ChevronRightCircleIcon,
+  Loader2Icon,
+  Trash2Icon,
+} from "lucide-react";
+import {
   ColumnDef,
+  ColumnFiltersState,
+  RowData,
+  SortingState,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
-  ColumnFiltersState,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
-  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -20,11 +26,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-import { ChevronLeftCircleIcon, ChevronRightCircleIcon } from "lucide-react";
+import { Size } from "@prisma/client";
+import axios from "axios";
+import toast from "react-hot-toast";
 import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
@@ -40,6 +48,11 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = useState({});
+  const router = useRouter();
+  const params = useParams();
+  const pathName = usePathname();
+  const [loading, setLoading] = useState(false);
 
   const table = useReactTable({
     data,
@@ -48,14 +61,81 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
+      rowSelection,
     },
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
   });
 
+  const onDelete = async (data: TData[]) => {
+    const currentPath = pathName.split("/").pop();
+    if (currentPath === "billboards") {
+      // @ts-ignore
+      const arrayOfIds = data.map((item: Size) => item.id);
+      console.log(arrayOfIds);
+      try {
+        setLoading(true);
+        await axios.delete(`/api/${params.storeId}/billboards`, {
+          data: arrayOfIds,
+        });
+        router.refresh();
+        router.push(`/${params.storeId}/billboards`);
+        toast.success("Size deleted.");
+      } catch (error: any) {
+        toast.error(
+          "Make sure you removed all categories using this billboard first."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (currentPath === "sizes") {
+      // @ts-ignore
+      const arrayOfIds = data.map((item: Size) => item.id);
+      console.log(arrayOfIds);
+      try {
+        setLoading(true);
+        await axios.delete(`/api/${params.storeId}/sizes`, {
+          data: arrayOfIds,
+        });
+        router.refresh();
+        router.push(`/${params.storeId}/sizes`);
+        toast.success("Size deleted.");
+      } catch (error: any) {
+        toast.error(
+          "Make sure you removed all categories using this billboard first."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (currentPath === "categories") {
+      // @ts-ignore
+      const arrayOfIds = data.map((item: Size) => item.id);
+      console.log(arrayOfIds);
+      try {
+        setLoading(true);
+        await axios.delete(`/api/${params.storeId}/categories`, {
+          data: arrayOfIds,
+        });
+        router.refresh();
+        router.push(`/${params.storeId}/categories`);
+        toast.success("Size deleted.");
+      } catch (error: any) {
+        toast.error(
+          "Make sure you removed all categories using this billboard first."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
   return (
     <div>
       <div className="flex items-center py-4">
@@ -67,7 +147,27 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        {table.getFilteredSelectedRowModel().rows.length > 0 ? (
+          <Button
+            variant="destructive"
+            size="sm"
+            className="ml-2"
+            disabled={loading}
+            onClick={() =>
+              onDelete(
+                table
+                  .getFilteredSelectedRowModel()
+                  .rows.map((row) => row.original)
+              )
+            }
+          >
+            <Trash2Icon className="w-4 h-4 mr-2" />
+            Delete All selected items
+            {loading && <Loader2Icon className="w-4 h-4 ml-2 animate-spin" />}
+          </Button>
+        ) : null}
       </div>
+
       <div className="border rounded-md">
         <Table>
           <TableHeader>
@@ -137,6 +237,10 @@ export function DataTable<TData, TValue>({
           Next
           <ChevronRightCircleIcon className="w-4 h-4 ml-2" />
         </Button>
+      </div>
+      <div className="flex-1 text-sm text-muted-foreground">
+        {table.getFilteredSelectedRowModel().rows.length} of{" "}
+        {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
     </div>
   );

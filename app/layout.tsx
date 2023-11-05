@@ -1,9 +1,11 @@
-import type { Metadata } from "next";
+import "./globals.css";
+
+import { ClerkProvider } from "@clerk/nextjs";
 // import { Inter } from "next/font/google";
 import { GeistSans } from "geist/font";
-import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
+import type { Metadata } from "next";
 import { ModalProvider } from "@/providers/modal-provider";
+import NextTopLoader from "nextjs-toploader";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ToastProvider } from "@/providers/toast-provider";
 import { Toaster } from "@/components/ui/toaster";
@@ -24,6 +26,17 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={GeistSans.className}>
+          <NextTopLoader
+            color="#7c3aed"
+            initialPosition={0.08}
+            crawlSpeed={200}
+            height={6}
+            crawl={true}
+            showSpinner={true}
+            easing="ease"
+            speed={200}
+            shadow="0 0 40px #7c3aed,0 0 10px #7c3aed"
+          />
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

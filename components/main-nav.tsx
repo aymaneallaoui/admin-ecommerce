@@ -1,9 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+
+import Link from "next/link";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 export function MainNav({
   className,
@@ -22,6 +23,11 @@ export function MainNav({
       href: `/${params.storeId}/categories`,
       label: "categories",
       active: pathName === `/${params.storeId}/categories`,
+    },
+    {
+      href: `/${params.storeId}/sizes`,
+      label: "sizes",
+      active: pathName === `/${params.storeId}/sizes`,
     },
     {
       href: `/${params.storeId}/settings`,
