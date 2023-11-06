@@ -76,7 +76,6 @@ export function DataTable<TData, TValue>({
     if (currentPath === "billboards") {
       // @ts-ignore
       const arrayOfIds = data.map((item: Size) => item.id);
-      console.log(arrayOfIds);
       try {
         setLoading(true);
         await axios.delete(`/api/${params.storeId}/billboards`, {
@@ -97,7 +96,6 @@ export function DataTable<TData, TValue>({
     if (currentPath === "sizes") {
       // @ts-ignore
       const arrayOfIds = data.map((item: Size) => item.id);
-      console.log(arrayOfIds);
       try {
         setLoading(true);
         await axios.delete(`/api/${params.storeId}/sizes`, {
@@ -118,7 +116,6 @@ export function DataTable<TData, TValue>({
     if (currentPath === "categories") {
       // @ts-ignore
       const arrayOfIds = data.map((item: Size) => item.id);
-      console.log(arrayOfIds);
       try {
         setLoading(true);
         await axios.delete(`/api/${params.storeId}/categories`, {
@@ -127,6 +124,26 @@ export function DataTable<TData, TValue>({
         router.refresh();
         router.push(`/${params.storeId}/categories`);
         toast.success("Size deleted.");
+      } catch (error: any) {
+        toast.error(
+          "Make sure you removed all categories using this billboard first."
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (currentPath === "colors") {
+      // @ts-ignore
+      const arrayOfIds = data.map((item: Size) => item.id);
+      try {
+        setLoading(true);
+        await axios.delete(`/api/${params.storeId}/colors`, {
+          data: arrayOfIds,
+        });
+        router.refresh();
+        router.push(`/${params.storeId}/colors`);
+        toast.success("Selected Colors deleted.");
       } catch (error: any) {
         toast.error(
           "Make sure you removed all categories using this billboard first."
