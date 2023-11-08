@@ -11,6 +11,8 @@
 
 .env
 
+/providers/test.js
+
 # next.js
 /.next/
 /out/
