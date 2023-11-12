@@ -152,6 +152,25 @@ export function DataTable<TData, TValue>({
         setLoading(false);
       }
     }
+    if (currentPath === "products") {
+      // @ts-ignore
+      const arrayOfIds = data.map((item: Size) => item.id);
+
+      console.log(arrayOfIds);
+      try {
+        setLoading(true);
+        await axios.delete(`/api/${params.storeId}/products`, {
+          data: arrayOfIds,
+        });
+        router.refresh();
+        router.push(`/${params.storeId}/products`);
+        toast.success("Selected products deleted.");
+      } catch (error: any) {
+        toast.error("Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
   };
   return (
     <div>

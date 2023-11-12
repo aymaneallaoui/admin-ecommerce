@@ -163,25 +163,7 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
-    const categories = await prismadb.category.findMany({
-      where: {
-        billboardId: {
-          in: body,
-        },
-      },
-    });
-
-    const categoryIds = categories.map((category) => category.id);
-
-    await prismadb.category.deleteMany({
-      where: {
-        id: {
-          in: categoryIds,
-        },
-      },
-    });
-
-    const billboard = await prismadb.billboard.deleteMany({
+    const products = await prismadb.products.deleteMany({
       where: {
         id: {
           in: body,
@@ -189,9 +171,9 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json(billboard);
+    return NextResponse.json(products);
   } catch (error) {
-    console.log("[BILLBOARDS_DELETE]", error);
+    console.log("[PRODUCTS_DELETE]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
 }
